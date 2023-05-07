@@ -34,9 +34,9 @@ class Game {
     if (diagonalsResultTopLeft != ' ') {
       return diagonalsResultTopLeft;
     }
-    String diagonalssResultTopRight = checkDiagonalsTopRightBottomLeft();
-    if (diagonalssResultTopRight != ' ') {
-      return diagonalssResultTopRight;
+    String diagonalsResultTopRight = checkDiagonalsTopRightBottomLeft();
+    if (diagonalsResultTopRight != ' ') {
+      return diagonalsResultTopRight;
     }
     return ' ';
   }
@@ -123,7 +123,7 @@ class Game {
 
       int occurCount = 0;
       for (int j = tileNumber;
-          j < winLimitNumber * axisLen + winLimitNumber - 1;
+          j < tileNumber + winLimitNumber * axisLen + winLimitNumber - 1;
           j += axisLen + 1) {
         if (gameBoard[tileNumber] == gameBoard[j]) {
           occurCount++;
@@ -139,18 +139,19 @@ class Game {
 
   String checkDiagonalsTopRightBottomLeft() {
     int maxLen = axisLen * axisLen;
-    int bounds = axisLen - winLimitNumber;
+    int bounds = winLimitNumber - 1;
 
     for (int tileNumber = 0; tileNumber < maxLen; tileNumber++) {
       if (gameBoard[tileNumber] == ' ' || tileNumber ~/ axisLen < bounds) {
         continue;
       }
-      if (tileNumber % axisLen >= winLimitNumber) {
+      if (tileNumber % axisLen >= (axisLen - bounds)) {
         continue;
       }
-
       int occurCount = 0;
-      for (int j = tileNumber; j < maxLen && j > 0; j -= axisLen - 1) {
+      for (int j = tileNumber;
+          j >= tileNumber - bounds * axisLen + winLimitNumber - 1;
+          j -= axisLen - 1) {
         if (gameBoard[tileNumber] == gameBoard[j]) {
           occurCount++;
         }
