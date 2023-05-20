@@ -108,8 +108,10 @@ class _GameBoardPageState extends State<GameBoardPage> {
       setState(() {
         if (isXTurn) {
           Game().gameBoard[index] = 'X';
+          Game().put('X', index);
         } else {
           Game().gameBoard[index] = 'O';
+          Game().put('O', index);
         }
         isXTurn = !isXTurn;
         String winnner = Game().findWinner();
