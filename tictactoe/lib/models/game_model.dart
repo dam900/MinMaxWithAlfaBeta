@@ -1,5 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
-
 class Game {
   final int axisLen;
   final int winLimitNumber;
@@ -36,22 +34,105 @@ class Game {
   }
 
   String findWinner() {
-    // String colsResult = checkCols();
-    // if (colsResult != ' ') {
-    //   return colsResult;
-    // }
-    // String rowsResult = checkRows();
-    // if (rowsResult != ' ') {
-    //   return rowsResult;
-    // }
-    // String diagonalsResultTopLeft = checkDiagonalsTopLeftBottomRight();
-    // if (diagonalsResultTopLeft != ' ') {
-    //   return diagonalsResultTopLeft;
-    // }
-    // String diagonalsResultTopRight = checkDiagonalsTopRightBottomLeft();
-    // if (diagonalsResultTopRight != ' ') {
-    //   return diagonalsResultTopRight;
-    // }
+    String colsResult = checkCols();
+    if (colsResult != ' ') {
+      return colsResult;
+    }
+    String rowsResult = checkRows();
+    if (rowsResult != ' ') {
+      return rowsResult;
+    }
+    String diagonalsResultTopLeft = checkDiagonalsTopLeftBottomRight();
+    if (diagonalsResultTopLeft != ' ') {
+      return diagonalsResultTopLeft;
+    }
+    String diagonalsResultTopRight = checkDiagonalsTopRightBottomLeft();
+    if (diagonalsResultTopRight != ' ') {
+      return diagonalsResultTopRight;
+    }
+    return ' ';
+  }
+
+  String checkCols() {
+    for (int i = 0; i < axisLen; i++) {
+      for (int j = 0; j <= axisLen - winLimitNumber; j++) {
+        if (_gameBoard[i][j] == ' ') {
+          continue;
+        }
+        int occurCount = 0;
+        for (int k = 0; k < winLimitNumber; k++) {
+          if (_gameBoard[i][j] == _gameBoard[i][j + k]) {
+            occurCount++;
+          }
+        }
+        if (occurCount == winLimitNumber) {
+          return _gameBoard[i][j];
+        }
+      }
+    }
+    return ' ';
+  }
+
+  String checkRows() {
+    for (int i = 0; i <= axisLen - winLimitNumber; i++) {
+      for (int j = 0; j < axisLen; j++) {
+        if (_gameBoard[i][j] == ' ') {
+          continue;
+        }
+        int occurCount = 0;
+        for (int k = 0; k < winLimitNumber; k++) {
+          if (_gameBoard[i][j] == _gameBoard[i + k][j]) {
+            occurCount++;
+          }
+        }
+        if (occurCount == winLimitNumber) {
+          return _gameBoard[i][j];
+        }
+      }
+    }
+
+    return ' ';
+  }
+
+  String checkDiagonalsTopLeftBottomRight() {
+    for (int i = 0; i <= axisLen - winLimitNumber; i++) {
+      for (int j = 0; j <= axisLen - winLimitNumber; j++) {
+        if (_gameBoard[i][j] == ' ') {
+          continue;
+        }
+        int occurCount = 0;
+        for (int k = 0; k < winLimitNumber; k++) {
+          if (_gameBoard[i][j] == _gameBoard[i + k][j + k]) {
+            occurCount++;
+          }
+        }
+        if (occurCount == winLimitNumber) {
+          return _gameBoard[i][j];
+        }
+      }
+    }
+
+    return ' ';
+  }
+
+  String checkDiagonalsTopRightBottomLeft() {
+    for (int i = axisLen - 1; i >= axisLen - winLimitNumber; i--) {
+      for (int j = 0; j <= axisLen - winLimitNumber; j++) {
+        if (_gameBoard[i][j] == ' ') {
+          continue;
+        }
+        int occurCount = 0;
+        for (int k = 0; k < winLimitNumber; k++) {
+          if (_gameBoard[i][j] == _gameBoard[i - k][j + k]) {
+            occurCount++;
+          }
+        }
+        if (occurCount == winLimitNumber) {
+          return _gameBoard[i][j];
+        }
+      }
+    }
+
     return ' ';
   }
 }

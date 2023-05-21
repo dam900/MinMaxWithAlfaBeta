@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tictactoe/models/game_model.dart';
-import 'package:provider/provider.dart';
 import 'package:tictactoe/pages/game_settings_page.dart';
 
 void main() {
