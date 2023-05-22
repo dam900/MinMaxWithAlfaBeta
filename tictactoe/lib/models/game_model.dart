@@ -1,7 +1,9 @@
+import 'package:tictactoe/models/board_model.dart';
+
 class Game {
   final int axisLen;
   final int winLimitNumber;
-  final List<List<String>> _gameBoard = [];
+  final GameBoard _board;
 
   static Game? _game;
   factory Game({int axisLen = 3, int winLimitNumber = 3}) {
@@ -9,28 +11,23 @@ class Game {
         Game._internal(axisLen: axisLen, winLimitNumber: winLimitNumber);
   }
 
-  Game._internal({required this.axisLen, required this.winLimitNumber}) {
-    for (int i = 0; i < axisLen; i++) {
-      _gameBoard.add(List.filled(axisLen, ' '));
-    }
-  }
+  Game._internal({required this.axisLen, required this.winLimitNumber})
+      : _board = GameBoard.empty(axisLen: axisLen);
 
   List<String> get gameBoard {
-    var spreadGameBoard = <String>[];
-    for (final sublist in _gameBoard) {
-      spreadGameBoard.addAll(sublist);
-    }
-    return spreadGameBoard;
+    return _board.spreadGameBoard;
+  }
+
+  GameBoard get board {
+    return _board;
   }
 
   void clearGameBoard() {
-    for (int i = 0; i < axisLen; i++) {
-      _gameBoard[i] = List.filled(axisLen, ' ');
-    }
+    _board.clear();
   }
 
   void put(String player, int position) {
-    _gameBoard[position ~/ axisLen][position % axisLen] = player;
+    _board.put(player, position);
   }
 
   String findWinner() {
@@ -56,17 +53,17 @@ class Game {
   String checkCols() {
     for (int i = 0; i < axisLen; i++) {
       for (int j = 0; j <= axisLen - winLimitNumber; j++) {
-        if (_gameBoard[i][j] == ' ') {
+        if (_board.gameBoard[i][j] == ' ') {
           continue;
         }
         int occurCount = 0;
         for (int k = 0; k < winLimitNumber; k++) {
-          if (_gameBoard[i][j] == _gameBoard[i][j + k]) {
+          if (_board.gameBoard[i][j] == _board.gameBoard[i][j + k]) {
             occurCount++;
           }
         }
         if (occurCount == winLimitNumber) {
-          return _gameBoard[i][j];
+          return _board.gameBoard[i][j];
         }
       }
     }
@@ -76,17 +73,17 @@ class Game {
   String checkRows() {
     for (int i = 0; i <= axisLen - winLimitNumber; i++) {
       for (int j = 0; j < axisLen; j++) {
-        if (_gameBoard[i][j] == ' ') {
+        if (_board.gameBoard[i][j] == ' ') {
           continue;
         }
         int occurCount = 0;
         for (int k = 0; k < winLimitNumber; k++) {
-          if (_gameBoard[i][j] == _gameBoard[i + k][j]) {
+          if (_board.gameBoard[i][j] == _board.gameBoard[i + k][j]) {
             occurCount++;
           }
         }
         if (occurCount == winLimitNumber) {
-          return _gameBoard[i][j];
+          return _board.gameBoard[i][j];
         }
       }
     }
@@ -97,17 +94,17 @@ class Game {
   String checkDiagonalsTopLeftBottomRight() {
     for (int i = 0; i <= axisLen - winLimitNumber; i++) {
       for (int j = 0; j <= axisLen - winLimitNumber; j++) {
-        if (_gameBoard[i][j] == ' ') {
+        if (_board.gameBoard[i][j] == ' ') {
           continue;
         }
         int occurCount = 0;
         for (int k = 0; k < winLimitNumber; k++) {
-          if (_gameBoard[i][j] == _gameBoard[i + k][j + k]) {
+          if (_board.gameBoard[i][j] == _board.gameBoard[i + k][j + k]) {
             occurCount++;
           }
         }
         if (occurCount == winLimitNumber) {
-          return _gameBoard[i][j];
+          return _board.gameBoard[i][j];
         }
       }
     }
@@ -118,17 +115,17 @@ class Game {
   String checkDiagonalsTopRightBottomLeft() {
     for (int i = axisLen - 1; i >= axisLen - winLimitNumber; i--) {
       for (int j = 0; j <= axisLen - winLimitNumber; j++) {
-        if (_gameBoard[i][j] == ' ') {
+        if (_board.gameBoard[i][j] == ' ') {
           continue;
         }
         int occurCount = 0;
         for (int k = 0; k < winLimitNumber; k++) {
-          if (_gameBoard[i][j] == _gameBoard[i - k][j + k]) {
+          if (_board.gameBoard[i][j] == _board.gameBoard[i - k][j + k]) {
             occurCount++;
           }
         }
         if (occurCount == winLimitNumber) {
-          return _gameBoard[i][j];
+          return _board.gameBoard[i][j];
         }
       }
     }
