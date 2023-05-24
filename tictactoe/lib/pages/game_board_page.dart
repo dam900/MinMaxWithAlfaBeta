@@ -108,7 +108,19 @@ class _GameBoardPageState extends State<GameBoardPage> {
     );
   }
 
-  void onTap(int index) {
+  void showWinnerDialog(String text) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          content: Text(text),
+        );
+      },
+    );
+  }
+
+  void onTap(int index) async {
+    //drawing and registering real player move
     if (Game().spreadGameBoard[index] == ' ') {
       setState(() {
         if (isXTurn) {
@@ -118,42 +130,35 @@ class _GameBoardPageState extends State<GameBoardPage> {
           Game().spreadGameBoard[index] = 'O';
           Game().putFromIndex('O', index);
         }
-        // isXTurn = !isXTurn;
       });
-      String winnner = Game().findWinner();
-      if (winnner == ' ') {
-        compute(
-          model.findBestMove,
+      //check if there is a winner after the move
+      String winner = Game().findWinner();
+      //drawing and registering computer move
+      if (winner == ' ') {
+        await compute(
+          model.findTheBestMove,
           Game().gameBoard,
         ).then((move) {
           setState(() {
             Game().putFromPoint('O', move);
           });
         });
-
-        //   Point move = model.findBestMove(Game().gameBoard);
-        //   setState(() {
-        //     Game().putFromPoint('O', move);
-        //   });
       }
-      if (winnner != ' ') {
-        showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              content: Text('winner is $winnner'),
-            );
-          },
-        );
+      //check if there is a winner after the move
+      winner = Game().findWinner();
+      //if there is a winner show dialog and clear the board
+      //else if the every filed is occupied and there is know winner
+      //show dialog with 'draw' information and then clear the board
+      if (winner != ' ') {
+        showWinnerDialog('winner is $winner');
+        setState(() {
+          Game().clearGameBoard();
+        });
       } else if (Game().spreadGameBoard.every((element) => element != ' ')) {
-        showDialog(
-          context: context,
-          builder: (context) {
-            return const AlertDialog(
-              content: Text('draw'),
-            );
-          },
-        );
+        showWinnerDialog('draw');
+        setState(() {
+          Game().clearGameBoard();
+        });
       }
     }
   }

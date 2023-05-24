@@ -25,10 +25,6 @@ class GameBoard {
     return spreadGameBoard;
   }
 
-  int evaluateBoard() {
-    return 0;
-  }
-
   bool isMoveAvaliable() {
     for (var pos in spreadGameBoard) {
       if (pos == ' ') {
@@ -36,16 +32,6 @@ class GameBoard {
       }
     }
     return false;
-  }
-
-  void clearGameBoard() {
-    for (int i = 0; i < axisLen; i++) {
-      gameBoard[i] = List.filled(axisLen, ' ');
-    }
-  }
-
-  void put(String player, int position) {
-    gameBoard[position ~/ axisLen][position % axisLen] = player;
   }
 
   String checkColsForWinner() {
@@ -111,7 +97,7 @@ class GameBoard {
   }
 
   String checkDiagonalsTopRightForWinner() {
-    for (int i = axisLen - 1; i >= axisLen - winLimitNumber; i--) {
+    for (int i = axisLen - 1; i >= winLimitNumber-1; i--) {
       for (int j = 0; j <= axisLen - winLimitNumber; j++) {
         if (gameBoard[i][j] == ' ') {
           continue;

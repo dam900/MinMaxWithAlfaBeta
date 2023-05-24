@@ -32,7 +32,7 @@ class Game {
   }
 
   void putFromIndex(String player, int position) {
-    _gameBoard.put(player, position);
+    _gameBoard.gameBoard[position ~/ axisLen][position % axisLen] = player;
   }
 
   void putFromPoint(String player, Point point) {
