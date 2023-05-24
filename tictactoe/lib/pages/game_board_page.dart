@@ -1,4 +1,8 @@
+import 'dart:math';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:tictactoe/models/ai_model.dart';
 import 'package:tictactoe/models/game_model.dart';
 
 class GameBoardPage extends StatefulWidget {
@@ -11,6 +15,7 @@ class GameBoardPage extends StatefulWidget {
 
 class _GameBoardPageState extends State<GameBoardPage> {
   bool isXTurn = true;
+  AiModel model = AiModel();
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +51,7 @@ class _GameBoardPageState extends State<GameBoardPage> {
               child: GridView.builder(
                 shrinkWrap: true,
                 scrollDirection: Axis.horizontal,
-                itemCount: Game().gameBoard.length,
+                itemCount: Game().spreadGameBoard.length,
                 gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
                   mainAxisSpacing: 0,
                   crossAxisSpacing: 0,
@@ -67,7 +72,7 @@ class _GameBoardPageState extends State<GameBoardPage> {
                       ),
                       child: Center(
                         child: Text(
-                          Game().gameBoard[index],
+                          Game().spreadGameBoard[index],
                           style: const TextStyle(
                               color: Colors.black, fontSize: 35),
                         ),
@@ -104,37 +109,52 @@ class _GameBoardPageState extends State<GameBoardPage> {
   }
 
   void onTap(int index) {
-    if (Game().gameBoard[index] == ' ') {
+    if (Game().spreadGameBoard[index] == ' ') {
       setState(() {
         if (isXTurn) {
-          Game().gameBoard[index] = 'X';
-          Game().put('X', index);
+          Game().spreadGameBoard[index] = 'X';
+          Game().putFromIndex('X', index);
         } else {
-          Game().gameBoard[index] = 'O';
-          Game().put('O', index);
+          Game().spreadGameBoard[index] = 'O';
+          Game().putFromIndex('O', index);
         }
-        isXTurn = !isXTurn;
-        String winnner = Game().findWinner();
-        if (winnner != ' ') {
-          showDialog(
-            context: context,
-            builder: (context) {
-              return AlertDialog(
-                content: Text('winner is $winnner'),
-              );
-            },
-          );
-        } else if (Game().gameBoard.every((element) => element != ' ')) {
-          showDialog(
-            context: context,
-            builder: (context) {
-              return const AlertDialog(
-                content: Text('draw'),
-              );
-            },
-          );
-        }
+        // isXTurn = !isXTurn;
       });
+      String winnner = Game().findWinner();
+      if (winnner == ' ') {
+        compute(
+          model.findBestMove,
+          Game().gameBoard,
+        ).then((move) {
+          setState(() {
+            Game().putFromPoint('O', move);
+          });
+        });
+
+        //   Point move = model.findBestMove(Game().gameBoard);
+        //   setState(() {
+        //     Game().putFromPoint('O', move);
+        //   });
+      }
+      if (winnner != ' ') {
+        showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              content: Text('winner is $winnner'),
+            );
+          },
+        );
+      } else if (Game().spreadGameBoard.every((element) => element != ' ')) {
+        showDialog(
+          context: context,
+          builder: (context) {
+            return const AlertDialog(
+              content: Text('draw'),
+            );
+          },
+        );
+      }
     }
   }
 }
