@@ -1,7 +1,6 @@
-import 'dart:math';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:tictactoe/models/ai_alfa_beta_model.dart';
 import 'package:tictactoe/models/ai_model.dart';
 import 'package:tictactoe/models/game_model.dart';
 
@@ -15,7 +14,8 @@ class GameBoardPage extends StatefulWidget {
 
 class _GameBoardPageState extends State<GameBoardPage> {
   bool isXTurn = true;
-  AiModel model = AiModel();
+  // AiModel model = AiModel();
+  AiWithAlfaBetaModel model = AiWithAlfaBetaModel();
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +61,7 @@ class _GameBoardPageState extends State<GameBoardPage> {
                 itemBuilder: (context, index) {
                   return GestureDetector(
                     onTap: () {
-                      onTap(index);
+                      move(index);
                     },
                     child: Container(
                       decoration: BoxDecoration(
@@ -119,7 +119,7 @@ class _GameBoardPageState extends State<GameBoardPage> {
     );
   }
 
-  void onTap(int index) async {
+  void move(int index) async {
     //drawing and registering real player move
     if (Game().spreadGameBoard[index] == ' ') {
       setState(() {
