@@ -5,4 +5,5 @@ Drugi projekt z tego kursu polegał na zaimplementowaniu
 algorytmu MinMax wykorzystującego Alfa Beta Cięcia i zaprezentowaniu 
 działania na grze w warcaby lub kółko i krzyżyk.
 
-Ten projekt do prezentacji wykorzystuje gre w kółko i krzyżyk.
+Ten projekt do prezentacji wykorzystuje gre w kółko i krzyżyk z możliwością wyboru
+różnych rozmiarów planszy oraz różnych ilości figur potrzebnych do wygranej.
